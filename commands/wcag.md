@@ -164,7 +164,7 @@ Apply colors and formatting to create clear visual hierarchy:
 
 1. **Header/separator lines**: Exactly 80 characters using box drawing chars
 2. **Description text**: Wrap at ~70 chars with 4-space indent
-3. **Between results**: Double blank line + separator + double blank line
+3. **Between results**: Blank line + separator + blank line
 4. **Within results**: Single blank line between sections
 5. **Level format**: Use badge style `[Level AA]` instead of `(AA)`
 6. **Icons**: Use 🔗 for URL, 💡 for plain language, 👥 for why it matters
@@ -195,9 +195,8 @@ Found X criteria │ Levels: A (n), AA (n), AAA (n)
 
     👥 Who benefits and how, also wrapped appropriately.       ← dim italic
 
-
 ────────────────────────────────────────────────────────────────────────────────
-                                                               ↑ dim separator
+
 ```
 
 ## Plain Language Guidelines
@@ -254,9 +253,7 @@ Found 2 criteria │ Levels: AA (2)
     👥 People with low vision need to enlarge text to read     [dim italic]
        comfortably.
 
-
 ────────────────────────────────────────────────────────────────────────────────
-
 
 [2] WCAG 1.4.10 [Level AA]: Reflow
 
@@ -271,7 +268,7 @@ Found 2 criteria │ Levels: AA (2)
     👥 Users who zoom heavily shouldn't have to scroll left and
        right to read each line.
 
-
 ────────────────────────────────────────────────────────────────────────────────
+
 Related searches: /wcag resize | /wcag reflow | /wcag text size
 ```
