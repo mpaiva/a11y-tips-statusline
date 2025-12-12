@@ -111,41 +111,52 @@ Related criteria you might try:
 - /wcag [suggested term 2]
 ```
 
-## Report Format
+## Report Format (WCAG 1.4.8 Compliant)
 
-Structure ALL search results as a formatted report with these sections:
+Structure ALL search results following WCAG 1.4.8 Visual Presentation:
+- **Line length**: Max 80 characters - wrap long descriptions
+- **Alignment**: Left-aligned only (no justification)
+- **Line spacing**: Blank line between sections within a result
+- **Paragraph spacing**: Double blank line between numbered results
 
-### 1. Header
+### Formatting Rules
+
+1. **Header/separator lines**: Exactly 80 characters using box drawing chars
+2. **Description text**: Wrap at ~70 chars with 4-space indent
+3. **Between results**: Double blank line + separator + double blank line
+4. **Within results**: Single blank line between sections
+
+### Report Structure
+
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WCAG 2.2 Search Results: "[query]"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### 2. Summary Line
-```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Found X criteria | Levels: A (n), AA (n), AAA (n)
-```
 
-### 3. Numbered Results (in yellow)
-Each result should be numbered and include plain language explanation:
-```
+
 [1] WCAG X.X.X (Level): Title
-    Description text from WCAG...
+
+    Description text from WCAG, wrapped at approximately 70 characters
+    to stay within 80-char limit with the 4-space indent.
+
     URL: https://www.w3.org/TR/WCAG22/#...
 
-    In plain language: [1-2 sentence explanation]
-    Why it matters: [Who benefits]
+    In plain language: Simple explanation wrapped at 70 chars if needed
+    to maintain readable line lengths.
 
-───────────────────────────────────────────────────────────
+    Why it matters: Who benefits and how, also wrapped appropriately.
+
+
+────────────────────────────────────────────────────────────────────────────────
+
 
 [2] WCAG X.X.X (Level): Title
-    ...
-```
 
-### 4. Footer
-```
-───────────────────────────────────────────────────────────
+    ...
+
+
+────────────────────────────────────────────────────────────────────────────────
 Related searches: /wcag [term1] | /wcag [term2] | /wcag [term3]
 ```
 
@@ -176,34 +187,44 @@ For each criterion, add plain language after the URL:
 ## Complete Example
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WCAG 2.2 Search Results: "zoom"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Found 2 criteria | Levels: AA (2)
 
+
 [1] WCAG 1.4.4 (AA): Resize text
+
     Except for captions and images of text, text can be resized
-    without assistive technology up to 200 percent without loss
-    of content or functionality.
+    without assistive technology up to 200 percent without loss of
+    content or functionality.
+
     URL: https://www.w3.org/TR/WCAG22/#resize-text
 
-    In plain language: Users must be able to zoom text to 200%
-    using browser settings without content breaking or overlapping.
-    Why it matters: People with low vision need to enlarge text
-    to read comfortably.
+    In plain language: Users must be able to zoom text to 200% using
+    browser settings without content breaking or overlapping.
 
-───────────────────────────────────────────────────────────
+    Why it matters: People with low vision need to enlarge text to
+    read comfortably.
+
+
+────────────────────────────────────────────────────────────────────────────────
+
 
 [2] WCAG 1.4.10 (AA): Reflow
+
     Content can be presented without loss of information or
     functionality, and without requiring scrolling in two dimensions.
+
     URL: https://www.w3.org/TR/WCAG22/#reflow
 
-    In plain language: At 400% zoom (320px viewport), content
-    should reflow into a single column with no horizontal scrolling.
+    In plain language: At 400% zoom (320px viewport), content should
+    reflow into a single column with no horizontal scrolling.
+
     Why it matters: Users who zoom heavily shouldn't have to scroll
     left and right to read each line.
 
-───────────────────────────────────────────────────────────
+
+────────────────────────────────────────────────────────────────────────────────
 Related searches: /wcag resize | /wcag reflow | /wcag text size
 ```
