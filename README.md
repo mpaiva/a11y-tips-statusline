@@ -7,7 +7,7 @@ WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidel
 ## Features
 
 - 🎯 **87 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
-- 🔄 **Rotating tips** - New tip every minute to reinforce accessibility awareness
+- 🔄 **Random tips** - New random tip on each statusline refresh
 - 🎨 **Color-coded** - Tips displayed in yellow (256-color mode) for visibility
 - 📊 **Full statusline** - Includes directory, model, git branch, and token usage
 
@@ -58,19 +58,6 @@ curl -fsSL https://raw.githubusercontent.com/mpaiva/a11y-tips-statusline/main/un
 ```
 
 ## Customization
-
-### Change tip rotation interval
-
-By default, tips rotate every minute. To change this, edit `~/.claude/statusline.sh` and modify the line:
-
-```bash
-minute=$(date +%M | sed 's/^0//')  # Rotates every minute
-```
-
-For example, to rotate every 5 minutes:
-```bash
-minute=$(( $(date +%M | sed 's/^0//') / 5 ))
-```
 
 ### Change tip color
 

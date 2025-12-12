@@ -50,8 +50,7 @@ if [ -f "$WCAG_JSON" ]; then
     # Extract all success criteria with ref_id, title, level, and description
     # Format: "WCAG X.X.X (Level): Title - Description"
     tip_count=$(jq '[.[].guidelines[].success_criteria[]] | length' "$WCAG_JSON")
-    minute=$(date +%M | sed 's/^0//')  # Remove leading zero
-    tip_index=$((minute % tip_count))
+    tip_index=$((RANDOM % tip_count))
 
     # Get the success criterion at the calculated index and format it
     a11y_tip=$(jq -r "[.[].guidelines[].success_criteria[]][$tip_index] | \"WCAG \(.ref_id) (\(.level)): \(.title) - \(.description)\"" "$WCAG_JSON")
