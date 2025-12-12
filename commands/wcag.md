@@ -86,9 +86,33 @@ jq -r '[.[].guidelines[] | select((.title | ascii_downcase | contains("KEYWORD")
 ```
 
 ANSI codes reference:
+
+**Reset:**
+- `\u001b[0m` = reset all formatting
+
+**Font weights:**
 - `\u001b[1m` = bold
-- `\u001b[38;5;178m` = yellow (color 178)
-- `\u001b[0m` = reset
+- `\u001b[2m` = dim
+- `\u001b[3m` = italic
+- `\u001b[4m` = underline
+
+**Colors:**
+- `\u001b[32m` = green
+- `\u001b[34m` = blue
+- `\u001b[36m` = cyan
+- `\u001b[93m` = bright yellow
+- `\u001b[97m` = bright white
+- `\u001b[38;5;178m` = yellow (256-color, matches statusline)
+
+**Combined (for this design):**
+- `\u001b[1;93m` = bold bright yellow (header)
+- `\u001b[1;97m` = bold bright white (result numbers)
+- `\u001b[1;36m` = bold cyan (ref ID)
+- `\u001b[36m` = cyan (level badge)
+- `\u001b[1;38;5;178m` = bold yellow (title)
+- `\u001b[2;4;34m` = dim underline blue (URL)
+- `\u001b[3;32m` = italic green (plain language)
+- `\u001b[2;3m` = dim italic (why it matters)
 
 ## Fallback Behavior
 
@@ -111,7 +135,7 @@ Related criteria you might try:
 - /wcag [suggested term 2]
 ```
 
-## Report Format (WCAG 1.4.8 Compliant)
+## Report Format (WCAG 1.4.8 Compliant + Visual Design)
 
 Structure ALL search results following WCAG 1.4.8 Visual Presentation:
 - **Line length**: Max 80 characters - wrap long descriptions
@@ -119,45 +143,61 @@ Structure ALL search results following WCAG 1.4.8 Visual Presentation:
 - **Line spacing**: Blank line between sections within a result
 - **Paragraph spacing**: Double blank line between numbered results
 
+### Visual Design Spec
+
+Apply colors and formatting to create clear visual hierarchy:
+
+| Element | Color | Weight | ANSI Code |
+|---------|-------|--------|-----------|
+| Header bar + title | Bright yellow | Bold | `\u001b[1;93m` |
+| Result number `[1]` | White | Bold | `\u001b[1;97m` |
+| Ref ID `WCAG 2.4.7` | Cyan | Bold | `\u001b[1;36m` |
+| Level badge `[Level AA]` | Cyan | Normal | `\u001b[36m` |
+| Criterion title | Yellow | Bold | `\u001b[1;38;5;178m` |
+| Description | Default | Normal | (reset) |
+| 🔗 URL | Blue | Dim + Underline | `\u001b[2;4;34m` |
+| 💡 Plain language | Green | Italic | `\u001b[3;32m` |
+| 👥 Why it matters | Default | Dim + Italic | `\u001b[2;3m` |
+| Separator `─────` | Default | Dim | `\u001b[2m` |
+
 ### Formatting Rules
 
 1. **Header/separator lines**: Exactly 80 characters using box drawing chars
 2. **Description text**: Wrap at ~70 chars with 4-space indent
 3. **Between results**: Double blank line + separator + double blank line
 4. **Within results**: Single blank line between sections
+5. **Level format**: Use badge style `[Level AA]` instead of `(AA)`
+6. **Icons**: Use 🔗 for URL, 💡 for plain language, 👥 for why it matters
 
 ### Report Structure
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WCAG 2.2 Search Results: "[query]"
+WCAG 2.2 Search Results: "[query]"                    ← bold bright yellow
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Found X criteria | Levels: A (n), AA (n), AAA (n)
+Found X criteria │ Levels: A (n), AA (n), AAA (n)
 
 
-[1] WCAG X.X.X (Level): Title
+[1] WCAG X.X.X [Level AA]: Title
+ ↑   ↑          ↑          ↑
+ │   │          │          └─ bold yellow
+ │   │          └─ cyan
+ │   └─ bold cyan
+ └─ bold white
 
     Description text from WCAG, wrapped at approximately 70 characters
-    to stay within 80-char limit with the 4-space indent.
+    to stay within 80-char limit with the 4-space indent.     ← default
 
-    URL: https://www.w3.org/TR/WCAG22/#...
+    🔗 https://www.w3.org/TR/WCAG22/#...                       ← dim blue underline
 
-    In plain language: Simple explanation wrapped at 70 chars if needed
-    to maintain readable line lengths.
+    💡 Simple explanation wrapped at 70 chars if needed        ← italic green
+       to maintain readable line lengths.
 
-    Why it matters: Who benefits and how, also wrapped appropriately.
-
-
-────────────────────────────────────────────────────────────────────────────────
-
-
-[2] WCAG X.X.X (Level): Title
-
-    ...
+    👥 Who benefits and how, also wrapped appropriately.       ← dim italic
 
 
 ────────────────────────────────────────────────────────────────────────────────
-Related searches: /wcag [term1] | /wcag [term2] | /wcag [term3]
+                                                               ↑ dim separator
 ```
 
 ## Plain Language Guidelines
@@ -186,43 +226,50 @@ For each criterion, add plain language after the URL:
 
 ## Complete Example
 
+The following shows the visual design with color annotations:
+
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-WCAG 2.2 Search Results: "zoom"
+WCAG 2.2 Search Results: "zoom"                              [bold bright yellow]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Found 2 criteria | Levels: AA (2)
+Found 2 criteria │ Levels: AA (2)
 
 
-[1] WCAG 1.4.4 (AA): Resize text
+[1] WCAG 1.4.4 [Level AA]: Resize text
+│    │          │          │
+│    │          │          └─ bold yellow
+│    │          └─ cyan
+│    └─ bold cyan
+└─ bold white
 
     Except for captions and images of text, text can be resized
     without assistive technology up to 200 percent without loss of
     content or functionality.
 
-    URL: https://www.w3.org/TR/WCAG22/#resize-text
+    🔗 https://www.w3.org/TR/WCAG22/#resize-text              [dim blue underline]
 
-    In plain language: Users must be able to zoom text to 200% using
-    browser settings without content breaking or overlapping.
+    💡 Users must be able to zoom text to 200% using browser   [italic green]
+       settings without content breaking or overlapping.
 
-    Why it matters: People with low vision need to enlarge text to
-    read comfortably.
+    👥 People with low vision need to enlarge text to read     [dim italic]
+       comfortably.
 
 
 ────────────────────────────────────────────────────────────────────────────────
 
 
-[2] WCAG 1.4.10 (AA): Reflow
+[2] WCAG 1.4.10 [Level AA]: Reflow
 
     Content can be presented without loss of information or
     functionality, and without requiring scrolling in two dimensions.
 
-    URL: https://www.w3.org/TR/WCAG22/#reflow
+    🔗 https://www.w3.org/TR/WCAG22/#reflow
 
-    In plain language: At 400% zoom (320px viewport), content should
-    reflow into a single column with no horizontal scrolling.
+    💡 At 400% zoom (320px viewport), content should reflow into
+       a single column with no horizontal scrolling.
 
-    Why it matters: Users who zoom heavily shouldn't have to scroll
-    left and right to read each line.
+    👥 Users who zoom heavily shouldn't have to scroll left and
+       right to read each line.
 
 
 ────────────────────────────────────────────────────────────────────────────────
