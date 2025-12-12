@@ -120,3 +120,48 @@ For each matching criterion, display in yellow (color 178):
 - **URL** to the official WCAG specification - yellow
 
 If no results found after fallback, output in plain text with suggestions.
+
+## Plain Language Explanations
+
+After each WCAG criterion result, add a plain language explanation to help non-technical users understand:
+
+**Format for each result:**
+```
+[Yellow jq output: WCAG X.X.X (Level): Title + Description + URL]
+
+**In plain language:** [1-2 sentence explanation using everyday words]
+**Why it matters:** [Who benefits and how - 1 sentence]
+```
+
+**Guidelines for plain language:**
+- Target 6th-8th grade reading level
+- Use active voice ("Add descriptions to images" not "Descriptions should be added")
+- Avoid jargon - use the substitutions below
+- Explain the real-world impact
+- Keep to 2-3 sentences max total
+
+**Term substitutions:**
+
+| Technical Term | Say Instead |
+|----------------|-------------|
+| text alternative | text description |
+| assistive technology | screen readers and other tools |
+| programmatically determined | detected by software automatically |
+| operable | works, can be used |
+| perceivable | can be seen, heard, or felt |
+| conformance | meeting the requirements |
+| user agent | browser |
+| synchronized media | video with sound |
+| cognitive load | mental effort |
+| focus indicator | visible highlight showing where you are |
+| viewport | screen or window |
+
+**Example output:**
+```
+WCAG 1.4.3 (AA): Contrast (Minimum)
+The visual presentation of text has a contrast ratio of at least 4.5:1...
+URL: https://www.w3.org/TR/WCAG22/#contrast-minimum
+
+In plain language: Text must stand out clearly from its background - use dark text on light backgrounds or light text on dark backgrounds.
+Why it matters: People with low vision or color blindness need enough contrast to read content comfortably.
+```
