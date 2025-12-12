@@ -9,8 +9,10 @@
 set -e
 
 CLAUDE_DIR="$HOME/.claude"
+COMMANDS_DIR="$CLAUDE_DIR/commands"
 STATUSLINE_FILE="$CLAUDE_DIR/statusline.sh"
 WCAG_FILE="$CLAUDE_DIR/wcag-search.json"
+WCAG_COMMAND="$COMMANDS_DIR/wcag.md"
 SETTINGS_FILE="$CLAUDE_DIR/settings.json"
 
 # Colors for output
@@ -39,6 +41,14 @@ if [ -f "$WCAG_FILE" ]; then
     echo -e "${GREEN}✓${NC} Removed wcag-search.json"
 else
     echo -e "${YELLOW}→${NC} wcag-search.json not found (already removed?)"
+fi
+
+# Remove /wcag slash command
+if [ -f "$WCAG_COMMAND" ]; then
+    rm "$WCAG_COMMAND"
+    echo -e "${GREEN}✓${NC} Removed /wcag command"
+else
+    echo -e "${YELLOW}→${NC} /wcag command not found (already removed?)"
 fi
 
 # Clean up old wcag-tokens directory if it exists (from previous versions)

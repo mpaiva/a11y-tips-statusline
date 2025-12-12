@@ -10,8 +10,10 @@ set -e
 
 REPO_URL="https://raw.githubusercontent.com/mpaiva/a11y-tips-statusline/main"
 CLAUDE_DIR="$HOME/.claude"
+COMMANDS_DIR="$CLAUDE_DIR/commands"
 STATUSLINE_FILE="$CLAUDE_DIR/statusline.sh"
 WCAG_FILE="$CLAUDE_DIR/wcag-search.json"
+WCAG_COMMAND="$COMMANDS_DIR/wcag.md"
 SETTINGS_FILE="$CLAUDE_DIR/settings.json"
 
 # Colors for output
@@ -54,8 +56,9 @@ fi
 
 echo -e "${GREEN}✓${NC} jq is installed"
 
-# Create directory
+# Create directories
 mkdir -p "$CLAUDE_DIR"
+mkdir -p "$COMMANDS_DIR"
 
 # Backup existing statusline.sh if present
 if [ -f "$STATUSLINE_FILE" ]; then
@@ -74,6 +77,11 @@ echo -e "${GREEN}✓${NC} statusline.sh installed"
 echo -e "${YELLOW}→${NC} Downloading wcag-search.json..."
 curl -fsSL "$REPO_URL/wcag-search.json" -o "$WCAG_FILE"
 echo -e "${GREEN}✓${NC} wcag-search.json installed"
+
+# Download wcag.md slash command
+echo -e "${YELLOW}→${NC} Installing /wcag slash command..."
+curl -fsSL "$REPO_URL/commands/wcag.md" -o "$WCAG_COMMAND"
+echo -e "${GREEN}✓${NC} /wcag command installed"
 
 # Update settings.json
 echo -e "${YELLOW}→${NC} Updating settings.json..."
@@ -103,6 +111,11 @@ echo -e "${GREEN}═════════════════════
 echo -e "${GREEN}Installation complete!${NC}"
 echo ""
 echo "Restart Claude Code to see WCAG accessibility tips in your statusline."
+echo ""
+echo "Use the /wcag command to search WCAG criteria:"
+echo "  /wcag contrast      - search by keyword"
+echo "  /wcag 1.4.3         - lookup by criterion ID"
+echo "  /wcag level:AA      - filter by conformance level"
 echo ""
 echo "To uninstall:"
 echo "  curl -fsSL $REPO_URL/uninstall.sh | bash"

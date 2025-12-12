@@ -7,9 +7,10 @@ WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidel
 ## Features
 
 - 🎯 **87 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
-- 🔄 **Random tips** - New random tip on each statusline refresh
+- 🔄 **Random tips** - New accessibility tip every 30 seconds
 - 🎨 **Color-coded** - Tips displayed in yellow (256-color mode) for visibility
 - 📊 **Full statusline** - Includes directory, model, git branch, and token usage
+- 🔍 **Search command** - `/wcag` slash command to search criteria
 
 ## Installation
 
@@ -50,6 +51,35 @@ The statusline shows:
 - 🤖 Current Claude model
 - 🧮 Token usage and percentage
 - Yellow WCAG tip on its own line
+
+## /wcag Search Command
+
+Search WCAG criteria directly from Claude Code:
+
+```bash
+/wcag contrast        # Search by keyword
+/wcag 1.4.3           # Lookup by criterion ID
+/wcag level:AA        # Filter by conformance level
+/wcag level:A focus   # Combined: level filter + keyword
+```
+
+### Examples
+
+**Find contrast-related criteria:**
+```
+/wcag contrast
+```
+
+**Look up a specific criterion:**
+```
+/wcag 2.1.1
+```
+Returns WCAG 2.1.1 (A): Keyboard - All functionality is available from a keyboard...
+
+**List all Level AAA criteria:**
+```
+/wcag level:AAA
+```
 
 ## Uninstall
 
