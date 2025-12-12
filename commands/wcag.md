@@ -111,34 +111,51 @@ Related criteria you might try:
 - /wcag [suggested term 2]
 ```
 
-## Output Format
+## Report Format
 
-For each matching criterion, display in yellow (color 178):
-- **Ref ID** and **Level** (e.g., "WCAG 1.4.3 (AA)") - bold yellow
-- **Title** - bold yellow (same line as ref/level)
-- **Description** (include special_cases if present) - yellow
-- **URL** to the official WCAG specification - yellow
+Structure ALL search results as a formatted report with these sections:
 
-If no results found after fallback, output in plain text with suggestions.
-
-## Plain Language Explanations
-
-After each WCAG criterion result, add a plain language explanation to help non-technical users understand:
-
-**Format for each result:**
+### 1. Header
 ```
-[Yellow jq output: WCAG X.X.X (Level): Title + Description + URL]
-
-**In plain language:** [1-2 sentence explanation using everyday words]
-**Why it matters:** [Who benefits and how - 1 sentence]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WCAG 2.2 Search Results: "[query]"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Guidelines for plain language:**
+### 2. Summary Line
+```
+Found X criteria | Levels: A (n), AA (n), AAA (n)
+```
+
+### 3. Numbered Results (in yellow)
+Each result should be numbered and include plain language explanation:
+```
+[1] WCAG X.X.X (Level): Title
+    Description text from WCAG...
+    URL: https://www.w3.org/TR/WCAG22/#...
+
+    In plain language: [1-2 sentence explanation]
+    Why it matters: [Who benefits]
+
+───────────────────────────────────────────────────────────
+
+[2] WCAG X.X.X (Level): Title
+    ...
+```
+
+### 4. Footer
+```
+───────────────────────────────────────────────────────────
+Related searches: /wcag [term1] | /wcag [term2] | /wcag [term3]
+```
+
+## Plain Language Guidelines
+
+For each criterion, add plain language after the URL:
 - Target 6th-8th grade reading level
 - Use active voice ("Add descriptions to images" not "Descriptions should be added")
-- Avoid jargon - use the substitutions below
-- Explain the real-world impact
-- Keep to 2-3 sentences max total
+- Avoid jargon - use substitutions below
+- Keep to 2-3 sentences max
 
 **Term substitutions:**
 
@@ -156,12 +173,37 @@ After each WCAG criterion result, add a plain language explanation to help non-t
 | focus indicator | visible highlight showing where you are |
 | viewport | screen or window |
 
-**Example output:**
-```
-WCAG 1.4.3 (AA): Contrast (Minimum)
-The visual presentation of text has a contrast ratio of at least 4.5:1...
-URL: https://www.w3.org/TR/WCAG22/#contrast-minimum
+## Complete Example
 
-In plain language: Text must stand out clearly from its background - use dark text on light backgrounds or light text on dark backgrounds.
-Why it matters: People with low vision or color blindness need enough contrast to read content comfortably.
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WCAG 2.2 Search Results: "zoom"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Found 2 criteria | Levels: AA (2)
+
+[1] WCAG 1.4.4 (AA): Resize text
+    Except for captions and images of text, text can be resized
+    without assistive technology up to 200 percent without loss
+    of content or functionality.
+    URL: https://www.w3.org/TR/WCAG22/#resize-text
+
+    In plain language: Users must be able to zoom text to 200%
+    using browser settings without content breaking or overlapping.
+    Why it matters: People with low vision need to enlarge text
+    to read comfortably.
+
+───────────────────────────────────────────────────────────
+
+[2] WCAG 1.4.10 (AA): Reflow
+    Content can be presented without loss of information or
+    functionality, and without requiring scrolling in two dimensions.
+    URL: https://www.w3.org/TR/WCAG22/#reflow
+
+    In plain language: At 400% zoom (320px viewport), content
+    should reflow into a single column with no horizontal scrolling.
+    Why it matters: Users who zoom heavily shouldn't have to scroll
+    left and right to read each line.
+
+───────────────────────────────────────────────────────────
+Related searches: /wcag resize | /wcag reflow | /wcag text size
 ```
