@@ -43,19 +43,34 @@ else
     token_display="$total_tokens"
 fi
 
-# WCAG Accessibility Tips - Load from JSON file
+# WCAG Accessibility Tips - Load from JSON file with 30-second caching
 WCAG_JSON="$HOME/.claude/wcag-search.json"
+TIP_CACHE="/tmp/claude-a11y-tip-cache"
+MIN_TIP_DURATION=30  # Minimum seconds before tip changes
 
-if [ -f "$WCAG_JSON" ]; then
-    # Extract all success criteria with ref_id, title, level, and description
-    # Format: "WCAG X.X.X (Level): Title - Description"
-    tip_count=$(jq '[.[].guidelines[].success_criteria[]] | length' "$WCAG_JSON")
-    tip_index=$((RANDOM % tip_count))
+get_new_tip() {
+    if [ -f "$WCAG_JSON" ]; then
+        tip_count=$(jq '[.[].guidelines[].success_criteria[]] | length' "$WCAG_JSON")
+        tip_index=$((RANDOM % tip_count))
+        # Include special_cases titles when present (e.g., for criteria like 1.4.13)
+        jq -r "[.[].guidelines[].success_criteria[]][$tip_index] | \"WCAG \(.ref_id) (\(.level)): \(.title) - \(.description)\" + (if .special_cases then \" \" + ([.special_cases[].title] | join(\"; \")) else \"\" end)" "$WCAG_JSON"
+    else
+        echo "WCAG tips file not found"
+    fi
+}
 
-    # Get the success criterion at the calculated index and format it
-    a11y_tip=$(jq -r "[.[].guidelines[].success_criteria[]][$tip_index] | \"WCAG \(.ref_id) (\(.level)): \(.title) - \(.description)\"" "$WCAG_JSON")
+# Check if cached tip exists and is recent enough
+if [ -f "$TIP_CACHE" ]; then
+    cache_age=$(( $(date +%s) - $(stat -f %m "$TIP_CACHE" 2>/dev/null || stat -c %Y "$TIP_CACHE" 2>/dev/null) ))
+    if [ "$cache_age" -lt "$MIN_TIP_DURATION" ]; then
+        a11y_tip=$(cat "$TIP_CACHE")
+    else
+        a11y_tip=$(get_new_tip)
+        echo "$a11y_tip" > "$TIP_CACHE"
+    fi
 else
-    a11y_tip="WCAG tips file not found"
+    a11y_tip=$(get_new_tip)
+    echo "$a11y_tip" > "$TIP_CACHE"
 fi
 
 # Build status line with a11y_tip on its own line
