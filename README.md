@@ -9,6 +9,7 @@ WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidel
 - 🎯 **87 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
 - 🔄 **Random tips** - New accessibility tip every 30 seconds
 - 🎨 **Color-coded** - Tips displayed in yellow (256-color mode) for visibility
+- 📖 **Full content** - Long guidelines word-wrap to fit your terminal width — nothing is cut off
 - 📊 **Full statusline** - Includes directory, model, git branch, and token usage
 - 🔍 **Search command** - `/wcag` slash command to search criteria
 
@@ -41,16 +42,20 @@ curl -fsSL https://raw.githubusercontent.com/mpaiva/a11y-tips-statusline/main/in
 ## What You'll See
 
 ```
-📁 my-project │ 🤖 Opus 4.5 │ 🧮 52K (26%)
-WCAG 1.4.3 (AA): Contrast (Minimum) - The visual presentation of text and images of text has a contrast ratio of at least 4.5:1, except for the following:
+🌿 main │ 📁 my-project │ 🤖 Claude Sonnet 4.6 │ 🧮 52K (26%)
+WCAG 1.4.12 (AA): Text Spacing - In content implemented using markup languages
+that support the following text style properties, no loss of content or
+functionality occurs by setting all of the following and by changing no other
+style property: Line height (line spacing) to at least 1.5 times the font size
 ```
 
-The statusline shows:
-- 📁 Current directory name
+Long guidelines word-wrap to fit your terminal width so the full criterion text is always visible. The statusline shows:
+
 - 🌿 Git branch (when in a repo)
+- 📁 Current directory name
 - 🤖 Current Claude model
 - 🧮 Token usage and percentage
-- Yellow WCAG tip on its own line
+- Yellow WCAG tip on its own line (word-wrapped)
 
 ## /wcag Search Command
 
@@ -109,13 +114,13 @@ Common 256-color codes:
 To show tips without color, change:
 
 ```bash
-colored_tip="${a11y_color}${a11y_tip}${reset_color}"
+colored_tip="${a11y_color}${wrapped_tip}${reset_color}"
 ```
 
 To:
 
 ```bash
-colored_tip="$a11y_tip"
+colored_tip="$wrapped_tip"
 ```
 
 ## WCAG Guidelines Included
