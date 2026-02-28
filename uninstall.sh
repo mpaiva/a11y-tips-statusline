@@ -51,6 +51,13 @@ else
     echo -e "${YELLOW}→${NC} /wcag command not found (already removed?)"
 fi
 
+# Remove tip cache file created at runtime
+TIP_CACHE="/tmp/claude-a11y-tip-cache"
+if [ -f "$TIP_CACHE" ]; then
+    rm "$TIP_CACHE"
+    echo -e "${GREEN}✓${NC} Removed tip cache"
+fi
+
 # Clean up old wcag-tokens directory if it exists (from previous versions)
 OLD_WCAG_DIR="$CLAUDE_DIR/wcag-tokens"
 if [ -d "$OLD_WCAG_DIR" ]; then
