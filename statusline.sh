@@ -73,19 +73,17 @@ else
     echo "$a11y_tip" > "$TIP_CACHE"
 fi
 
-# Truncate tip to prevent terminal truncation (most terminals are 120-200 cols wide)
-max_tip_len=120
-if [ "${#a11y_tip}" -gt "$max_tip_len" ]; then
-    a11y_tip="${a11y_tip:0:$max_tip_len}..."
-fi
-
 # Build status line with a11y_tip on its own line
 # Yellow color (using 256-color mode: color 178 is close to rgb(191,153,0))
 a11y_color=$'\033[38;5;178m'
 reset_color=$'\033[0m'
 
-# Embed color codes directly in the tip text
-colored_tip="${a11y_color}${a11y_tip}${reset_color}"
+# Word-wrap tip to terminal width so full content is visible across lines
+term_width=${COLUMNS:-$(tput cols 2>/dev/null || echo 120)}
+wrapped_tip=$(echo "$a11y_tip" | fold -s -w "$term_width")
+
+# Apply color to the wrapped tip
+colored_tip="${a11y_color}${wrapped_tip}${reset_color}"
 
 printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n%s" \
     "$git_branch" \
