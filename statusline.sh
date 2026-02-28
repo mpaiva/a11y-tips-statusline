@@ -30,7 +30,7 @@ fi
 
 # Calculate token usage and percentage
 total_tokens=$((total_input + total_output))
-if [ "$context_size" -gt 0 ]; then
+if [ "$context_size" != "null" ] && [ "$context_size" -gt 0 ]; then
     context_pct=$((total_tokens * 100 / context_size))
 else
     context_pct=0
@@ -71,6 +71,12 @@ if [ -f "$TIP_CACHE" ]; then
 else
     a11y_tip=$(get_new_tip)
     echo "$a11y_tip" > "$TIP_CACHE"
+fi
+
+# Truncate tip to prevent terminal truncation (most terminals are 120-200 cols wide)
+max_tip_len=120
+if [ "${#a11y_tip}" -gt "$max_tip_len" ]; then
+    a11y_tip="${a11y_tip:0:$max_tip_len}..."
 fi
 
 # Build status line with a11y_tip on its own line
