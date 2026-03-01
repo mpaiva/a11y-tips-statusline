@@ -2,8 +2,6 @@
 
 WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidelines in your statusline.
 
-![a11y-tips-statusline screenshot](screenshots/statusline-screenshot.png)
-
 ![Rotating WCAG tips in the statusline](screenshots/statusline-rotating.gif)
 
 ## Features
