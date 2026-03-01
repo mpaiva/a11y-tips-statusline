@@ -49,6 +49,8 @@ except where the underlying function requires input that depends on the path of
 the user's movement and not just the endpoints.
 ```
 
+![a11y-tips-statusline screenshot](screenshots/statusline-screenshot.png)
+
 Long guidelines word-wrap to fit your terminal width so the full criterion text is always visible. The statusline shows:
 
 - 🌿 Git branch (when in a repo)
