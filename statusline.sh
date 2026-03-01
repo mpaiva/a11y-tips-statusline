@@ -79,7 +79,12 @@ a11y_color=$'\033[38;5;178m'
 reset_color=$'\033[0m'
 
 # Word-wrap tip to terminal width so full content is visible across lines
-term_width=${COLUMNS:-$(tput cols 2>/dev/null || echo 120)}
+# stty size </dev/tty reads the real terminal dimensions even in subprocesses
+# (COLUMNS is a shell variable not inherited by subprocesses; tput fails without a TTY)
+term_width=$(stty size </dev/tty 2>/dev/null | cut -d' ' -f2)
+if [ -z "$term_width" ] || [ "$term_width" -lt 10 ] 2>/dev/null; then
+    term_width=${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}
+fi
 wrapped_tip=$(echo "$a11y_tip" | fold -s -w "$term_width")
 
 # Apply color to the wrapped tip
