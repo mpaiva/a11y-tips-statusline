@@ -9,7 +9,8 @@ WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidel
 - 🎯 **87 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
 - 🔄 **Random tips** - New accessibility tip every 30 seconds
 - 🎨 **Color-coded** - Tips displayed in yellow (256-color mode) for visibility
-- 📖 **Full content** - Long guidelines word-wrap to fit your terminal width — nothing is cut off
+- 📖 **Full content** - Tips word-wrap to match the statusline width, keeping them clear of Claude Code's right-side messages
+- 📐 **Narrow terminal hint** - When your terminal is under 120 columns, a resize prompt replaces the tip so it's never silently truncated
 - 📊 **Full statusline** - Includes directory, model, git branch, and token usage
 - 🔍 **Search command** - `/wcag` slash command to search criteria
 
@@ -51,13 +52,19 @@ the user's movement and not just the endpoints.
 
 ![a11y-tips-statusline screenshot](screenshots/statusline-screenshot.png)
 
-Long guidelines word-wrap to fit your terminal width so the full criterion text is always visible. The statusline shows:
+Tips word-wrap to the same width as line 1, keeping them clear of Claude Code's bottom-right status messages (e.g. "Context left until auto-compact: 6%"). The statusline shows:
 
 - 🌿 Git branch (when in a repo)
 - 📁 Current directory name
 - 🤖 Current Claude model
 - 🧮 Token usage and percentage
-- Yellow WCAG tip on its own line (word-wrapped)
+- Yellow WCAG tip on its own line (word-wrapped to line 1 width)
+
+**Narrow terminal:** If your terminal is less than 120 columns wide, the tip line shows:
+```
+↔ Widen terminal to 120+ cols to see WCAG accessibility tips
+```
+This prevents the tip from being silently truncated.
 
 ## /wcag Search Command
 
