@@ -78,17 +78,26 @@ fi
 a11y_color=$'\033[38;5;178m'
 reset_color=$'\033[0m'
 
-# Word-wrap tip to terminal width so full content is visible across lines
-# stty size </dev/tty reads the real terminal dimensions even in subprocesses
-# (COLUMNS is a shell variable not inherited by subprocesses; tput fails without a TTY)
-term_width=$(stty size </dev/tty 2>/dev/null | cut -d' ' -f2)
-if [ -z "$term_width" ] || [ "$term_width" -lt 10 ] 2>/dev/null; then
-    term_width=${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}
+# Detect terminal width; awk handles multiple spaces and forces numeric output
+# (COLUMNS is a bash variable not inherited by subprocesses; tput fails without a TTY;
+#  fold -s can wrap at a wrong width if stty returns unexpected output, so we truncate
+#  to a single line instead to guarantee exactly one tip line in the statusline)
+term_width=$(stty size </dev/tty 2>/dev/null | awk '{print $2+0}')
+if [ -z "$term_width" ] || [ "$term_width" -le 10 ] 2>/dev/null; then
+    term_width=80
 fi
-wrapped_tip=$(echo "$a11y_tip" | fold -s -w "$term_width")
 
-# Apply color to the wrapped tip
-colored_tip="${a11y_color}${wrapped_tip}${reset_color}"
+# Truncate tip to fit on one line; bash string slicing avoids multi-line fold issues
+max_tip_len=$((term_width - 4))
+[ "$max_tip_len" -lt 40 ] && max_tip_len=40
+if [ "${#a11y_tip}" -gt "$max_tip_len" ]; then
+    display_tip="${a11y_tip:0:$((max_tip_len - 1))}…"
+else
+    display_tip="$a11y_tip"
+fi
+
+# Apply color to the single-line tip
+colored_tip="${a11y_color}${display_tip}${reset_color}"
 
 printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n%s" \
     "$git_branch" \
