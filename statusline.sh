@@ -77,13 +77,17 @@ fi
 a11y_tip=$(printf '%s' "$a11y_tip" | tr '\n' ' ')
 
 # Truncate tip to fit the statusline width.
-# $COLUMNS is 0 in Claude Code's subprocess context; tput cols returns 80 (non-TTY
-# default) which is too narrow. Use 120 as a safe default that fits most terminals.
+# tput cols returns 80 (non-TTY default) in Claude Code's subprocess context, and
+# the statusline renderer clips lines at that display width.
+# "A11Y: " (6 bytes) + tip + "…" (3 bytes UTF-8) must fit within 80 bytes:
+#   6 + 70 + 3 = 79 bytes → always visible with ellipsis at 80-col clip.
+# If tput reports a wider real terminal, use that minus prefix/ellipsis overhead.
 term_cols=$(tput cols 2>/dev/null)
 if [ "${term_cols:-0}" -gt 80 ] 2>/dev/null; then
-    max_tip=$(( term_cols - 4 ))
+    max_tip=$(( term_cols - 10 ))   # 6 prefix + 3 ellipsis + 1 margin
+    [ "$max_tip" -gt 160 ] && max_tip=160
 else
-    max_tip=120
+    max_tip=70
 fi
 if [ "${#a11y_tip}" -gt "$max_tip" ]; then
     a11y_tip="${a11y_tip:0:$max_tip}…"
