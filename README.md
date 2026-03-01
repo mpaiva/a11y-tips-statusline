@@ -4,6 +4,8 @@ WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidel
 
 ![a11y-tips-statusline screenshot](screenshot.png)
 
+![Rotating WCAG tips in the statusline](screenshots/statusline-rotating.gif)
+
 ## Features
 
 - 🎯 **87 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
@@ -67,6 +69,10 @@ Search WCAG criteria directly from Claude Code:
 /wcag level:AA        # Filter by conformance level
 /wcag level:A focus   # Combined: level filter + keyword
 ```
+
+![/wcag search demo](screenshots/wcag-search.gif)
+
+![/wcag command variations](screenshots/wcag-commands.gif)
 
 ### Examples
 
