@@ -115,6 +115,18 @@ Common 256-color codes:
 - `213` - Pink
 - `208` - Orange
 
+### Screenshot color palette
+
+The screenshots and animated GIFs use colors verified for WCAG AA compliance against the dark background (`#1a1a1a`):
+
+| Role | Hex | Contrast Ratio | Level |
+|------|-----|----------------|-------|
+| Body text | `#d4d4d4` | 11.74:1 | ✅ AAA |
+| WCAG tips (yellow) | `#d4a017` | 7.33:1 | ✅ AAA |
+| Highlights (bright yellow) | `#f0c030` | 10.18:1 | ✅ AAA |
+| Hints (green) | `#7ec87e` | 8.66:1 | ✅ AAA |
+| Secondary text (gray) | `#888888` | 4.88:1 | ✅ AA |
+
 ### Disable color
 
 To show tips without color, change:
