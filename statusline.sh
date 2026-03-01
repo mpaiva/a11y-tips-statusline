@@ -16,10 +16,16 @@ total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens')
 total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens')
 context_size=$(echo "$input" | jq -r '.context_window.context_window_size')
 
+# Get current directory name
+dir_name=$(basename "$current_dir")
+
 # Get git branch if in a git repo (skip optional locks)
-branch=""
+git_branch=""
 if git -C "$current_dir" rev-parse --git-dir > /dev/null 2>&1; then
     branch=$(git -C "$current_dir" --no-optional-locks branch --show-current 2>/dev/null)
+    if [ -n "$branch" ]; then
+        git_branch="🌿 $branch │ "
+    fi
 fi
 
 # Calculate token usage and percentage
@@ -67,28 +73,27 @@ else
     echo "$a11y_tip" > "$TIP_CACHE"
 fi
 
-# Strip embedded newlines so the tip is always a single line
-a11y_tip=$(printf '%s' "$a11y_tip" | tr '\n' ' ')
+# Build status line with a11y_tip on its own line
+# Yellow color (using 256-color mode: color 178 is close to rgb(191,153,0))
+a11y_color=$'\033[38;5;178m'
+reset_color=$'\033[0m'
 
-# Build ASCII-only status suffix — no emojis or box-drawing chars.
-# Root cause of "A1…" bug: Claude Code counts total output bytes (excl. newlines)
-# against an ~80-byte budget. The old 2-line format used 75 bytes on line 1
-# (emojis = 4 bytes each, │ = 3 bytes each), leaving only 5 bytes for the tip
-# line → "A1" + "…". Single-line ASCII-only format gives the tip maximum space.
-if [ -n "$branch" ]; then
-    status_suffix=" | $branch | $model_name | ${token_display} (${context_pct}%)"
-else
-    status_suffix=" | $model_name | ${token_display} (${context_pct}%)"
+# Word-wrap tip to terminal width so full content is visible across lines
+# stty size </dev/tty reads the real terminal dimensions even in subprocesses
+# (COLUMNS is a shell variable not inherited by subprocesses; tput fails without a TTY)
+term_width=$(stty size </dev/tty 2>/dev/null | cut -d' ' -f2)
+if [ -z "$term_width" ] || [ "$term_width" -lt 10 ] 2>/dev/null; then
+    term_width=${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}
 fi
+wrapped_tip=$(echo "$a11y_tip" | fold -s -w "$term_width")
 
-# Dynamically size the tip to fill whatever budget remains after the suffix.
-# Total budget ≈ 80 bytes = "A11Y: " (6) + tip + "…" (3) + suffix (variable).
-suffix_len=${#status_suffix}
-max_tip=$(( 80 - 6 - suffix_len - 3 ))
-[ "$max_tip" -lt 10 ] && max_tip=10   # safety floor
+# Apply color to the wrapped tip
+colored_tip="${a11y_color}${wrapped_tip}${reset_color}"
 
-if [ "${#a11y_tip}" -gt "$max_tip" ]; then
-    a11y_tip="${a11y_tip:0:$max_tip}…"
-fi
-
-printf "A11Y: %s%s" "$a11y_tip" "$status_suffix"
+printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n%s" \
+    "$git_branch" \
+    "$dir_name" \
+    "$model_name" \
+    "$token_display" \
+    "$context_pct" \
+    "$colored_tip"
