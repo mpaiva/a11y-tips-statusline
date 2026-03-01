@@ -102,7 +102,22 @@ if [ "$width_known" = true ] && [ "$term_width" -lt "$MIN_WIDTH_FOR_TIPS" ] 2>/d
     a11y_tip="↔ Widen terminal to ${MIN_WIDTH_FOR_TIPS}+ cols to see WCAG accessibility tips"
 fi
 
-wrapped_tip=$(echo "$a11y_tip" | fold -s -w "$term_width")
+# Cap tip wrap width at line 1's display width, not the full terminal width.
+# When Claude Code shows right-side messages (e.g. "Context left until auto-compact: 6%")
+# the tip would otherwise extend into that area and get truncated.
+# Each emoji (🌿 📁 🤖 🧮) = 2 display cols; │ and all ASCII = 1 col each.
+#   "🌿 BRANCH │ "  = 6 + len(branch)   [if in a git repo]
+#   "📁 DIR │ "     = 6 + len(dir_name)
+#   "🤖 MODEL │ "   = 6 + len(model_name)
+#   "🧮 TOK (PCT%)" = 7 + len(token) + len(pct)
+if [ -n "$branch" ]; then
+    line1_width=$(( 6 + ${#branch} ))
+else
+    line1_width=0
+fi
+line1_width=$(( line1_width + 6 + ${#dir_name} + 6 + ${#model_name} + 7 + ${#token_display} + ${#context_pct} ))
+
+wrapped_tip=$(echo "$a11y_tip" | fold -s -w "$line1_width")
 
 # Apply color to the wrapped tip
 colored_tip="${a11y_color}${wrapped_tip}${reset_color}"
