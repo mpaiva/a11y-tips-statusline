@@ -73,36 +73,12 @@ else
     echo "$a11y_tip" > "$TIP_CACHE"
 fi
 
-# Build status line with a11y_tip on its own line
-# Yellow color (using 256-color mode: color 178 is close to rgb(191,153,0))
-a11y_color=$'\033[38;5;178m'
-reset_color=$'\033[0m'
-
-# Detect terminal width; awk handles multiple spaces and forces numeric output
-# (COLUMNS is a bash variable not inherited by subprocesses; tput fails without a TTY;
-#  fold -s can wrap at a wrong width if stty returns unexpected output, so we truncate
-#  to a single line instead to guarantee exactly one tip line in the statusline)
-term_width=$(stty size </dev/tty 2>/dev/null | awk '{print $2+0}')
-if [ -z "$term_width" ] || [ "$term_width" -le 10 ] 2>/dev/null; then
-    term_width=80
-fi
-
-# Truncate tip to fit on one line; bash string slicing avoids multi-line fold issues
-max_tip_len=$((term_width - 4))
-[ "$max_tip_len" -lt 40 ] && max_tip_len=40
-if [ "${#a11y_tip}" -gt "$max_tip_len" ]; then
-    display_tip="${a11y_tip:0:$((max_tip_len - 1))}…"
-else
-    display_tip="$a11y_tip"
-fi
-
-# Apply color to the single-line tip
-colored_tip="${a11y_color}${display_tip}${reset_color}"
-
+# Output status line; tip on its own line (no ANSI codes — they inflate byte
+# width which causes Claude Code's statusline renderer to truncate the tip)
 printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n%s" \
     "$git_branch" \
     "$dir_name" \
     "$model_name" \
     "$token_display" \
     "$context_pct" \
-    "$colored_tip"
+    "$a11y_tip"
