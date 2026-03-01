@@ -91,9 +91,10 @@ fi
 
 # Output status line: info on line 1, tip on line 2
 # No ANSI color codes — Claude Code's statusline renderer counts raw bytes (not visual
-# width) for truncation, so any escape sequence eats into the display budget, leaving
-# only 'WC...' visible. Use ♿ prefix for visual distinction without ANSI overhead.
-printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n♿ %s" \
+# width) for truncation, so any escape sequence eats into the display budget.
+# Use plain ASCII prefix — ♿ (U+267F) is "ambiguous width" and may be counted as 2
+# display columns, consuming the budget before any tip text can appear.
+printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\nA11Y: %s" \
     "$git_branch" \
     "$dir_name" \
     "$model_name" \
