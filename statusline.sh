@@ -16,16 +16,10 @@ total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens')
 total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens')
 context_size=$(echo "$input" | jq -r '.context_window.context_window_size')
 
-# Get current directory name
-dir_name=$(basename "$current_dir")
-
 # Get git branch if in a git repo (skip optional locks)
-git_branch=""
+branch=""
 if git -C "$current_dir" rev-parse --git-dir > /dev/null 2>&1; then
     branch=$(git -C "$current_dir" --no-optional-locks branch --show-current 2>/dev/null)
-    if [ -n "$branch" ]; then
-        git_branch="🌿 $branch │ "
-    fi
 fi
 
 # Calculate token usage and percentage
@@ -76,32 +70,25 @@ fi
 # Strip embedded newlines so the tip is always a single line
 a11y_tip=$(printf '%s' "$a11y_tip" | tr '\n' ' ')
 
-# Truncate tip to fit the statusline width.
-# tput cols returns 80 (non-TTY default) in Claude Code's subprocess context, and
-# the statusline renderer clips lines at that display width.
-# "A11Y: " (6 bytes) + tip + "…" (3 bytes UTF-8) must fit within 80 bytes:
-#   6 + 70 + 3 = 79 bytes → always visible with ellipsis at 80-col clip.
-# If tput reports a wider real terminal, use that minus prefix/ellipsis overhead.
-term_cols=$(tput cols 2>/dev/null)
-if [ "${term_cols:-0}" -gt 80 ] 2>/dev/null; then
-    max_tip=$(( term_cols - 10 ))   # 6 prefix + 3 ellipsis + 1 margin
-    [ "$max_tip" -gt 160 ] && max_tip=160
+# Build ASCII-only status suffix — no emojis or box-drawing chars.
+# Root cause of "A1…" bug: Claude Code counts total output bytes (excl. newlines)
+# against an ~80-byte budget. The old 2-line format used 75 bytes on line 1
+# (emojis = 4 bytes each, │ = 3 bytes each), leaving only 5 bytes for the tip
+# line → "A1" + "…". Single-line ASCII-only format gives the tip maximum space.
+if [ -n "$branch" ]; then
+    status_suffix=" | $branch | $model_name | ${token_display} (${context_pct}%)"
 else
-    max_tip=70
+    status_suffix=" | $model_name | ${token_display} (${context_pct}%)"
 fi
+
+# Dynamically size the tip to fill whatever budget remains after the suffix.
+# Total budget ≈ 80 bytes = "A11Y: " (6) + tip + "…" (3) + suffix (variable).
+suffix_len=${#status_suffix}
+max_tip=$(( 80 - 6 - suffix_len - 3 ))
+[ "$max_tip" -lt 10 ] && max_tip=10   # safety floor
+
 if [ "${#a11y_tip}" -gt "$max_tip" ]; then
     a11y_tip="${a11y_tip:0:$max_tip}…"
 fi
 
-# Output status line: info on line 1, tip on line 2
-# No ANSI color codes — Claude Code's statusline renderer counts raw bytes (not visual
-# width) for truncation, so any escape sequence eats into the display budget.
-# Use plain ASCII prefix — ♿ (U+267F) is "ambiguous width" and may be counted as 2
-# display columns, consuming the budget before any tip text can appear.
-printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\nA11Y: %s" \
-    "$git_branch" \
-    "$dir_name" \
-    "$model_name" \
-    "$token_display" \
-    "$context_pct" \
-    "$a11y_tip"
+printf "A11Y: %s%s" "$a11y_tip" "$status_suffix"
