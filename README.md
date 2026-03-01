@@ -42,11 +42,11 @@ curl -fsSL https://raw.githubusercontent.com/mpaiva/a11y-tips-statusline/main/in
 ## What You'll See
 
 ```
-🌿 main │ 📁 my-project │ 🤖 Claude Sonnet 4.6 │ 🧮 52K (26%)
-WCAG 1.4.12 (AA): Text Spacing - In content implemented using markup languages
-that support the following text style properties, no loss of content or
-functionality occurs by setting all of the following and by changing no other
-style property: Line height (line spacing) to at least 1.5 times the font size
+🌿 main │ 📁 my-project │ 🤖 Claude Sonnet 4.6 │ 🧮 55K (27%)
+WCAG 2.1.1 (A): Keyboard - All functionality of the content is operable through a
+keyboard interface without requiring specific timings for individual keystrokes,
+except where the underlying function requires input that depends on the path of
+the user's movement and not just the endpoints.
 ```
 
 Long guidelines word-wrap to fit your terminal width so the full criterion text is always visible. The statusline shows:
