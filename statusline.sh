@@ -76,6 +76,19 @@ fi
 # Strip embedded newlines so the tip is always a single line
 a11y_tip=$(printf '%s' "$a11y_tip" | tr '\n' ' ')
 
+# Truncate tip to fit the statusline width.
+# $COLUMNS is 0 in Claude Code's subprocess context; tput cols returns 80 (non-TTY
+# default) which is too narrow. Use 120 as a safe default that fits most terminals.
+term_cols=$(tput cols 2>/dev/null)
+if [ "${term_cols:-0}" -gt 80 ] 2>/dev/null; then
+    max_tip=$(( term_cols - 4 ))
+else
+    max_tip=120
+fi
+if [ "${#a11y_tip}" -gt "$max_tip" ]; then
+    a11y_tip="${a11y_tip:0:$max_tip}…"
+fi
+
 # Output status line: info on line 1, tip on line 2
 # No ANSI color codes — Claude Code's statusline renderer counts raw bytes (not visual
 # width) for truncation, so any escape sequence eats into the display budget, leaving
