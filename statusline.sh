@@ -82,16 +82,23 @@ reset_color=$'\033[0m'
 # stty size </dev/tty reads the real terminal dimensions even in subprocesses
 # (COLUMNS is a shell variable not inherited by subprocesses; tput fails without a TTY)
 term_width=$(stty size </dev/tty 2>/dev/null | cut -d' ' -f2)
-if [ -z "$term_width" ] || [ "$term_width" -lt 10 ] 2>/dev/null; then
-    term_width=${COLUMNS:-$(tput cols 2>/dev/null || echo 80)}
+width_known=false
+if [ -n "$term_width" ] && [ "$term_width" -ge 10 ] 2>/dev/null; then
+    width_known=true
+else
+    # Fallback: COLUMNS is reliable when set (interactive shell); tput/echo 80 are not.
+    term_width=$COLUMNS
+    [ -n "$COLUMNS" ] && width_known=true
+    if [ -z "$term_width" ]; then
+        term_width=$(tput cols 2>/dev/null || echo 80)
+    fi
 fi
 
-# If the terminal is too narrow to display the tip meaningfully, show a resize hint.
-# The statusline renderer clips output proportional to terminal width, so below ~120
-# columns the tip is severely truncated. The hint itself also gets clipped at very
-# narrow widths, but at intermediate widths it clearly communicates what to do.
+# Only show the resize hint when we have a confirmed narrow width from stty or COLUMNS.
+# Skipping the hint when width is unknown avoids false positives in subprocess contexts
+# where stty fails and tput/COLUMNS both return 80 as a default.
 MIN_WIDTH_FOR_TIPS=120
-if [ "$term_width" -lt "$MIN_WIDTH_FOR_TIPS" ] 2>/dev/null; then
+if [ "$width_known" = true ] && [ "$term_width" -lt "$MIN_WIDTH_FOR_TIPS" ] 2>/dev/null; then
     a11y_tip="↔ Widen terminal to ${MIN_WIDTH_FOR_TIPS}+ cols to see WCAG accessibility tips"
 fi
 
