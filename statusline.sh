@@ -73,9 +73,15 @@ else
     echo "$a11y_tip" > "$TIP_CACHE"
 fi
 
-# Output status line; tip on its own line (no ANSI codes — they inflate byte
-# width which causes Claude Code's statusline renderer to truncate the tip)
-printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n%s" \
+# Strip embedded newlines so the tip is always a single line
+a11y_tip=$(printf '%s' "$a11y_tip" | tr '\n' ' ')
+
+# Yellow color for the tip line (standard 8-color ANSI — minimal byte overhead)
+YELLOW=$'\033[33m'
+RESET=$'\033[0m'
+
+# Output status line: info on line 1, yellow tip on line 2
+printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n${YELLOW}%s${RESET}" \
     "$git_branch" \
     "$dir_name" \
     "$model_name" \
