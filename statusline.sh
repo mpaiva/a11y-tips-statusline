@@ -76,12 +76,11 @@ fi
 # Strip embedded newlines so the tip is always a single line
 a11y_tip=$(printf '%s' "$a11y_tip" | tr '\n' ' ')
 
-# Yellow color for the tip line (standard 8-color ANSI — minimal byte overhead)
-YELLOW=$'\033[33m'
-RESET=$'\033[0m'
-
-# Output status line: info on line 1, yellow tip on line 2
-printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n${YELLOW}%s${RESET}" \
+# Output status line: info on line 1, tip on line 2
+# No ANSI color codes — Claude Code's statusline renderer counts raw bytes (not visual
+# width) for truncation, so any escape sequence eats into the display budget, leaving
+# only 'WC...' visible. Use ♿ prefix for visual distinction without ANSI overhead.
+printf "%s📁 %s │ 🤖 %s │ 🧮 %s (%d%%)\n♿ %s" \
     "$git_branch" \
     "$dir_name" \
     "$model_name" \
