@@ -6,7 +6,7 @@ WCAG Accessibility Tips for Claude Code - displays rotating accessibility guidel
 
 ## Features
 
-- 🎯 **87 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
+- 🎯 **86 WCAG 2.2 success criteria** - Complete coverage of all WCAG 2.2 guidelines (Level A, AA, and AAA)
 - 🔄 **Random tips** - New accessibility tip every 30 seconds
 - 🎨 **Color-coded** - Tips displayed in yellow (256-color mode) for visibility
 - 📖 **Full content** - Tips word-wrap to match the statusline width, keeping them clear of Claude Code's right-side messages
@@ -150,14 +150,16 @@ colored_tip="$wrapped_tip"
 
 ## WCAG Guidelines Included
 
-All 87 success criteria from WCAG 2.2 are included, organized by principle:
+All 86 success criteria from WCAG 2.2 are included, organized by principle:
 
 | Principle | Guidelines | Success Criteria |
 |-----------|------------|------------------|
 | 1. Perceivable | 1.1-1.4 | 29 criteria |
-| 2. Operable | 2.1-2.5 | 29 criteria |
-| 3. Understandable | 3.1-3.3 | 17 criteria |
-| 4. Robust | 4.1 | 12 criteria |
+| 2. Operable | 2.1-2.5 | 34 criteria |
+| 3. Understandable | 3.1-3.3 | 21 criteria |
+| 4. Robust | 4.1 | 2 criteria |
+
+4.1.1 Parsing is left out: WCAG 2.2 made it obsolete and removed it.
 
 Coverage includes all conformance levels:
 - **Level A** - Essential accessibility
